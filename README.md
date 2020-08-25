@@ -82,9 +82,13 @@ You can input an actor name to add them to the listing for the current video.
 
 To save time, you can also input the actor and role name at the same time.  There are three delimiters that you can use:
 
+'''
 Arnold Schwarzenegger>Terminator
+
 Arnold Schwarzenegger as Terminator
+
 Arnold Schwarzenegger 	... 	Terminator
+'''
 
 The third thing, tab elipse tab, is what you get when you copy & paste from IMDb.  It'll look weird - the tabs come up as little boxes with Xs - but it'll work.
 
