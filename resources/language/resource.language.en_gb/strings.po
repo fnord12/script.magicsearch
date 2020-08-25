@@ -1,0 +1,121 @@
+# Kodi Media Center language file
+# Addon Name: Magic Search
+# Addon id: script.magicsearch
+msgid ""
+msgstr ""
+
+msgctxt "#44000"
+msgid "Genres"
+msgstr ""
+
+msgctxt "#44001"
+msgid "Select Genres"
+msgstr ""
+
+msgctxt "#44025"
+msgid "Are you sure?"
+msgstr ""
+
+msgctxt "#44000"
+msgid "New Genre"
+msgstr ""
+
+msgctxt "#44001"
+msgid "Filename"
+msgstr ""
+
+msgctxt "#44002"
+msgid "Search Results for:"
+msgstr ""
+
+msgctxt "#44003"
+msgid "Add Movie"
+msgstr ""
+
+msgctxt "#44004"
+msgid "Genre Overview"
+msgstr ""
+
+msgctxt "#44005"
+msgid "                                                          Genres"
+msgstr ""
+
+msgctxt "#44006"
+msgid "MUSIC"
+msgstr ""
+
+msgctxt "#44007"
+msgid "MOVIES"
+msgstr ""
+
+msgctxt "#44008"
+msgid "TV"
+msgstr ""
+
+msgctxt "#44009"
+msgid "Assigned Movies"
+msgstr ""
+
+
+msgctxt "#44010"
+msgid "Show Genreged Movies"
+msgstr ""
+
+msgctxt "#44011"
+msgid "Show Genreged TV Shows"
+msgstr ""
+
+msgctxt "#44012"
+msgid "Show Genreged Music Videos"
+msgstr ""
+
+msgctxt "#44013"
+msgid "Delete this Genre"
+msgstr ""
+
+msgctxt "#44014"
+msgid "Make a selection"
+msgstr ""
+
+msgctxt "#44015"
+msgid "Genre Management"
+msgstr ""
+
+msgctxt "#44016"
+msgid "Not implemented"
+msgstr ""
+
+msgctxt "#44017"
+msgid "No Genre"
+msgstr ""
+
+msgctxt "#44018"
+msgid "Add Music Video"
+msgstr ""
+
+msgctxt "#44019"
+msgid "Add TV Show"
+msgstr ""
+
+msgctxt "#44020"
+msgid "General Settings"
+msgstr ""
+
+msgctxt "#44021"
+msgid "Use MySQL-Database?"
+msgstr ""
+
+msgctxt "#44022"
+msgid "MySQL User"
+msgstr ""
+
+msgctxt "#44023"
+msgid "MySQL Password"
+msgstr ""
+
+msgctxt "#44024"
+msgid "Host address"
+msgstr ""
+    
+
+    

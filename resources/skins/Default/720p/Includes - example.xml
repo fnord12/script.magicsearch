@@ -1,0 +1,8 @@
+﻿
+<!-- add this somewhere in your Includes.xml file -->
+
+	<variable name="MagicSearch">
+		<value condition="Skin.HasSetting(MagicToggle)">Search</value>
+		<value condition="!Skin.HasSetting(MagicToggle)">Edit</value>
+		<value>Search</value>
+	</variable>

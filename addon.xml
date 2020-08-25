@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.magicsearch" name="Magic Search and Editor" version="1.0.0" provider-name="fnord12">
+	<requires>
+		<import addon="xbmc.python" version="2.25.0"/>
+	</requires>
+	<extension point="xbmc.python.script" library="default.py">
+		<provides>executable</provides>
+	</extension>
+	
+	<extension point="xbmc.python.pluginsource" library="plugin.py">
+		<provides>executable</provides>
+	</extension>
+	
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Improved search results for actors and more. Field editor.</summary>
+		<description lang="en_GB">An actor/director search engine and metadata editor.  See sample DialogVideoInfo.xml file included in Skins folder for how to call.
+
+-Displays search criteria in search results list.
+-Includes Writer credit in actor/director search results.
+-List the results chronologically instead of alphabetically.  This gives a feel more like IMDb or Wikipedia.
+-Integrates Movie, TV, and Episode results.  See a chronological listing of all an actor's appearances, regardless of the medium (again, similar to IMDb).
+-Suppress listings for Episodes when the actor already appears in the TV Show.
+-Display the Role (and/or director/writer) in the results list.
+-In general, allows skinning of what fields appear in the search.
+- Sort actors by Order field, or by Name or Role
+-Also allows for searches in other fields.    As seen in sample DialogVideoInfo, can click on Studio to do a Studio search.  Can click on genre or year to get a list of all movies/tvshows in that genre for the given year.
+
+As metadata editor:
+-Edit actor details
+-Add or delete actor
+-Edit year, genre, studio, plot (in a tiny box, sorry), etc.
+-See included sample DialogVideoInfo.xml to see how to call it.
+</description>
+<disclaimer lang="en_GB">Warnings:#1 Uses direct SQL calls and may require special configuration for non-standard Kodi database.  #2 Causes Kodi to crash on rare occasions.  See readme file.</disclaimer>
+
+
+		<language></language>
+		<platform>all</platform>
+		
+		<source>https://github.com/fnord12/script.magicsearch</source>
+		<forum></forum>
+		
+		<news>Initial release.</news>
+    <assets>
+      <icon>resources/icon.png</icon>
+      <fanart>resources/fanart.jpg</fanart>
+    </assets>
+</extension>
+</addon>
+
+
+
