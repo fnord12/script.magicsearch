@@ -186,6 +186,6 @@ Tested in Kodi 18 Leia only.  Won't work in 19 (uses Python 2.25)  Tested with l
 
 ## Credit
 
-The core database code for both searching and editing was taken from the tagoverview add-on, which i'm currently maintaining but which was originally developed by olivarr.  I could not have written this without using that code.
+1. The core database code for both searching and editing was taken from the tagoverview add-on, which i'm currently maintaining but which was originally developed by olivarr.  I could not have written this without using that code.
 
 2. Also thanks to ronie and Lunatix, who provided help on the Kodi forum.
