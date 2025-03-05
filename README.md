@@ -1,4 +1,4 @@
-Magic Search and Editor
+Magic Search and Editor for Kodi 21 Omega
 ======
 
 ![screenshot](https://github.com/fnord12/script.magicsearch/blob/master/resources/fanart.jpg)
@@ -166,14 +166,14 @@ Finally, if you want, you can further customize the search results pop-up.  This
 ## Caveats:
 
 ### Danger Zone
-The metadata editor works by modifying your database directly.  I've been using this for over a year myself with no problems.  I've tested by inputting all sorts of garbage into the edit fields, trying to find something that will break the database.  So far, it's handled it all (it mostly just takes your garbage and displays it back to you as text).  But i can't promise that your set-up won't have some difference that will cause a problem that could corrupt your database.  The search should be safe no matter what.  If you're going to try the editor, back up your database regularly, at least at first.  The standard Backup program that is part of the Kodi addon repository can backup your database on a daily schedule.
+The metadata editor works by modifying your database directly.  I've been using this for years with no problems.  I've tested by inputting all sorts of garbage into the edit fields, trying to find something that will break the database.  So far, it's handled it all (it mostly just takes your garbage and displays it back to you as text).  But i can't promise that your set-up won't have some difference that will cause a problem that could corrupt your database.  The search should be safe no matter what.  If you're going to try the editor, back up your database regularly, at least at first.  The standard Backup program that is part of the Kodi addon repository can backup your database on a daily schedule.
 
 Also, be aware of what you're doing when COMPLETELY REMOVING an actor or using the Swap fix.
 
 
 ### What's Supported
 
-Tested in Kodi 18 Leia only.  Won't work in 19 (uses Python 2.25)  Tested with local files only (not with streaming, not with SMBs).  It may still work in other cases.  See above regarding the database set-up; i personally can only support SQLite.
+Tested in Kodi 21 Omega.  Tested with local files only (not with streaming, not with SMBs).  It may still work in other cases.  See above regarding the database set-up; i personally can only support SQLite.
 
 ---
 ### Challenges
