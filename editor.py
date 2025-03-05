@@ -5,7 +5,6 @@ import xbmcgui
 import xbmcplugin
 from strings import *
 from EditorDatabase import CVideoDatabase
-
 ActorData=""
 MovieData=""
 
@@ -100,10 +99,12 @@ def getMovieData():
         MovieData = vdb.GetTVShowFrmDB(launchID)
     elif launchMedia == 'episode':
         MovieData =  vdb.GetEpisodeFrmDB(launchID)
+    elif launchMedia == 'musicvideo':
+        MovieData =  vdb.GetMusicVideoFrmDB(launchID)
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'Not applicable for this video type')
-        return
+        sys.exit("Not applicable for this video type")  
     return MovieData
 
 def cleanThumb(dirtyThumb):
@@ -151,6 +152,8 @@ def addActorParser():
             addActor(result)
         else:
             result = result.replace("*", "")
+            result = result.replace('"', "'")
+            
             result = result.split(', ')
             for actor in result:
                 addActor(actor)
@@ -159,10 +162,17 @@ def addActorParser():
 def addActor(result):
     resultRole = ""
     debug('result', result)
-    result = result.replace(" (as ", ">")
+    
+    
+    
+    
     result = result.replace(" 	... 	",">")
+    result = result.replace("	...	",">")
+    result = result.replace(" 	",">")
     result = result.replace(" as ", ">")
     result = result.replace(" - ", ">")
+    
+    
     
     if ">" in result:
         sep = ">"
@@ -321,7 +331,13 @@ def editAltTitle():
         if keyboard.isConfirmed() and keyboard.getText():
             result = (keyboard.getText().strip()) 
             detailEditor(result, editfield, "movie")
-            
+    elif launchMedia == "musicvideo":
+        editfield = "c09"
+        keyboard = xbmc.Keyboard(MovieData[0], "Edit Album")
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+            result = (keyboard.getText().strip()) 
+            detailEditor(result, editfield, "musicvideo")       
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'Not applicable for this video type')
@@ -332,15 +348,22 @@ def editStudio():
         keyboard = xbmc.Keyboard(MovieData[1], "Edit Studio")
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
-            result = (keyboard.getText().strip()) 
+            result = (keyboard.getText().strip())
             detailEditor(result, editfield, "movie")
     elif launchMedia == "tvshow":
         editfield = "c14"   
         keyboard = xbmc.Keyboard(MovieData[1], "Edit Studio")
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
-            result = (keyboard.getText().strip()) 
+            result = (keyboard.getText().strip())
             detailEditor(result, editfield, "tvshow")
+    elif launchMedia == "musicvideo":
+        editfield = "c06"   
+        keyboard = xbmc.Keyboard(MovieData[1], "Edit Studio")
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+            result = (keyboard.getText().strip())
+            detailEditor(result, editfield, "musicvideo")
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'Not applicable for this video type')
@@ -369,7 +392,13 @@ def editYear():
         if keyboard.isConfirmed() and keyboard.getText():
             result = (keyboard.getText().strip()) 
             detailEditor(result, editfield, "episode")
-    
+    elif launchMedia == "musicvideo":
+        editfield = "premiered"
+        keyboard = xbmc.Keyboard(MovieData[2], "Edit Year")
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+            result = (keyboard.getText().strip()) 
+            detailEditor(result, editfield, "musicvideo")
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'Not applicable for this video type')
@@ -390,6 +419,13 @@ def editGenre():
         if keyboard.isConfirmed() and keyboard.getText():
             result = (keyboard.getText().strip()) 
             detailEditor(result, editfield, "tvshow")
+    elif launchMedia == "musicvideo":
+        editfield = "c11"
+        keyboard = xbmc.Keyboard(MovieData[3], "Edit Genre")
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+            result = (keyboard.getText().strip()) 
+            detailEditor(result, editfield, "musicvideo")
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'Not applicable for this video type')
@@ -410,7 +446,13 @@ def editDirector():
         if keyboard.isConfirmed() and keyboard.getText():
             result = (keyboard.getText().strip()) 
             detailEditor(result, editfield, "episode")
-    
+    elif launchMedia == "musicvideo":
+        editfield = "c05"
+        keyboard = xbmc.Keyboard(MovieData[4], "Edit Director")
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+            result = (keyboard.getText().strip()) 
+            detailEditor(result, editfield, "musicvideo")
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'Not applicable for this video type')
@@ -431,7 +473,13 @@ def editWriter():
         if keyboard.isConfirmed() and keyboard.getText():
             result = (keyboard.getText().strip()) 
             detailEditor(result, editfield, "episode")
-    
+    elif launchMedia == "musicvideo":
+        editfield = "c10"
+        keyboard = xbmc.Keyboard(MovieData[5], "Edit Band/Artist")
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+            result = (keyboard.getText().strip()) 
+            detailEditor(result, editfield, "musicvideo")
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'Not applicable for this video type')
@@ -471,6 +519,13 @@ def editPlot():
         if keyboard.isConfirmed() and keyboard.getText():
             result = (keyboard.getText().strip()) 
             detailEditor(result, editfield, "episode")
+    elif launchMedia == 'musicvideo':
+        editfield = "c08"
+        keyboard = xbmc.Keyboard(MovieData[6], "Edit Plot")
+        keyboard.doModal()
+        if keyboard.isConfirmed() and keyboard.getText():
+            result = (keyboard.getText().strip()) 
+            detailEditor(result, editfield, "musicvideo")
     else:
         dialog = xbmcgui.Dialog()
         dialog.ok('Not applicable', 'How did you get here?')

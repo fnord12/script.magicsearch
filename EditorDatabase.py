@@ -194,6 +194,14 @@ class CVideoDatabase:
         cur.execute(sql)
         return cur.fetchall()
         
+    def GetMusicVideoFrmDB(vdb, launchID):
+        sql = 'select c09 as "Alt", c06 as "Studio", premiered as "Year", c11 as "Genre", c05 as "Director", c10 as "Writer", c08 as "plot", "" as tagline, "" as "MPAARating" from musicvideo where idMVideo = "%s"' % launchID
+        
+        db = CDatabase()
+        cur = db.con.cursor()
+        cur.execute(sql)
+        return cur.fetchall()
+        
     def updateDetailDB(vdb, result, editfield, ID, media):
         result = result.replace('"','\'')
         if media == "movie":
@@ -202,6 +210,8 @@ class CVideoDatabase:
             sql = 'update tvshow set %s = "%s" where idShow = "%s"' % (editfield, result, ID)
         elif media == "episode":
             sql = 'update episode set %s = "%s" where idEpisode = "%s"' % (editfield, result, ID)
+        elif media == "musicvideo":
+            sql = 'update musicvideo set %s = "%s" where idMVideo = "%s"' % (editfield, result, ID)    
     
         db = CDatabase()
         cur = db.con.cursor()

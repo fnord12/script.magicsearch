@@ -1,23 +1,15 @@
 import xbmcaddon, xbmc, sys, xbmcgui
 
 def debug(msg, *args):
-    try:
-        txt=u''
-        msg=unicode(msg)
+    try:     
+        xbmc.log("MAGICSEARCH: " + (str(msg)))
+     
         for arg in args:
-            if type(arg) == int:
-                arg = unicode(arg)
-            if type(arg) == list:
-                arg = unicode(arg)
-            txt = txt + u"/" + arg
-        if txt == u'':
-            xbmc.log(u"MSRCH: {0}".format(msg).encode('ascii','xmlcharrefreplace'), xbmc.LOGDEBUG)
-        else:
-            xbmc.log(u"MSRCH: {0}#{1}#".format(msg, txt).encode('ascii','xmlcharrefreplace'), xbmc.LOGDEBUG)
+            print(str(arg))
     except:
-        print "Error in Debugoutput"
-        print msg
-        print args
+        print("MAGICSEARCH strings.py: Error in Debugoutput")
+        print(msg)
+        print(args)
 
 ADDON = xbmcaddon.Addon(id='script.magicsearch')
 language = ADDON.getLocalizedString
@@ -67,9 +59,9 @@ PROPERTY_MOVIE          = 'movie'
 PROPERTY_TVSHOW         = 'tvshow'
 PROPERTY_MUSICVIDEO     = 'musicvideo'
 
-arglebargle = sys.argv[3]
-arglebargle = arglebargle.replace("?","")
-arglebargle = arglebargle = arglebargle.split('&')
+combinedParameter = sys.argv[3]
+combinedParameter = combinedParameter.replace("?","")
+combinedParameter = combinedParameter = combinedParameter.split('&')
 
 searchField = ToEdit = sys.argv[1]
 
@@ -78,7 +70,7 @@ if searchField == "director" or searchField == "writer":
     
 actorName = searchParameter = sys.argv[2]
 
-MagicToggle = arglebargle[3]
+MagicToggle = combinedParameter[3]
 
 if MagicToggle == "Search":
     if " / " in searchParameter:
@@ -90,12 +82,12 @@ if MagicToggle == "Search":
         
             searchParameter = searchParameterChoices[Choice]
 
-launchMedia = arglebargle[0]
-launchID = arglebargle[1]
-secondParameter = arglebargle[2]
+launchMedia = combinedParameter[0]
+launchID = combinedParameter[1]
+secondParameter = combinedParameter[2]
 
 
-debug("arglebargle", arglebargle)
+debug("combinedParameter", combinedParameter)
 debug("searchField", searchField)
 debug("ToEdit", ToEdit)
 debug("actorName", searchParameter)
@@ -121,7 +113,8 @@ def encode(s):
     return s.encode('utf-8','replace')
 
 def decode(string):
-    return string.decode('utf-8','replace')
+    #return string.decode('utf-8','replace')
+    return
 
 def uc(s):
     return unicode(s, 'utf-8','replace')

@@ -71,7 +71,8 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
         debug("refine", refine)        
         for movie in movieList:
             if movie[4] == "" and searchField == 'actor':
-                movie[4] = "[I]Actor[/I]"                   #subbing generic 'Actor' label when none is provided and doing very bad practice of embedding formatting
+                #subbing generic 'Actor' label when none is provided
+                movie[4] = "[I]Actor[/I]"                    
         for movie in movieList:
             if movie[1] == "":
                 mediaID = movie[0]
@@ -83,6 +84,9 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
                 mediaPath = mediaPath.replace('[(u"','')
                 mediaPath = mediaPath.replace('",)]','')
                 mediaPath = mediaPath.replace("\\\\","\\")
+                mediaPath = mediaPath.replace("[('","")
+                mediaPath = mediaPath.replace('[("','')
+                
                 movie[1] = mediaPath
                 debug('movie[1]', movie[1])
         movieList = self.removeDuplicate(movieList)
@@ -91,7 +95,6 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
             movieCompare = self.vdb.GetMovies(refine)
             movieCompareList = [list(x) for x in movieCompare]
             movieList = self. secondActorFilter(movieList,movieCompare)
-        #actorThumb = self.getActorThumb()
         control=self.getControl(MOVIELIST)
         for movie in movieList:
           control.addItem(self.createListItem(
@@ -112,7 +115,8 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
                                              )
                             )
         
-    def removeDuplicate(self,movieList):       #merges results where a person is an actor and/or a writer and/or an actor
+    #merges results where a person is an actor and/or a writer and/or an actor
+    def removeDuplicate(self,movieList):       
         delList = []
         for movie in movieList[:]:
             movieCompareIndex = 0
@@ -125,23 +129,36 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
              movieCompareIndex = movieCompareIndex + 1
         return movieList
  
-    def removeDupEpisodes(self,movieList):       #supresses episode listings when the actor is in the TVShow (doesn't affect writers and directors and we don't want it to)
+    #supresses episode listings when the actor is in the TVShow (doesn't affect writers and directors and we don't want it to)
+    def removeDupEpisodes(self,movieList):       
+        debug('Supressing Episodes')
         debug('movieList',movieList)
         for movie in movieList[:]:
+            debug('Considering ' + str(movie))
             movieCompareIndex = 0
             if movie[3] == 'TVShow':
+               #debug('TV Show')
                movieCompareIndex = 0
                pathLen = len(movie[1])
                for movieCompare in movieList[:]:  #  and movieCompare not in delList and movie not in delList - delete list not needed due to the way the entries are ordered
                    if (movieCompare[3] == 'Episode') and ("[I]Writer[/I]" not in movieCompare[4]) and ("[I]Director[/I]" not in movieCompare[4]):
-                       if movieCompare[1][:pathLen] == movie[1]:
-                           #delList.append(movieList[movieCompareIndex])
-                           del movieList[movieCompareIndex]
-                           movieCompareIndex = movieCompareIndex - 1
+                       #debug('BEGIN COMPARE movie[1]: ' + movie[1])
+                       #debug('movie[1]: ' + str(movie[1][3:]))
+                       #debug('movie[0]: ' + str(movie[0]))
+                       #debug('pathLen: ' + str(pathLen))
+                       #debug('MovieCompare[1] no truncate: ' + str(movieCompare[1]))
+                       #debug('MovieCompare[1] truncated: ' + str(movieCompare[1][:pathLen]))
+                       
+                       #Have to strip out the [(' code, hence [3:]
+                       if movie[1][3:] in movieCompare[1]:
+                            #debug('Made it to suppress code')
+                            del movieList[movieCompareIndex]
+                            movieCompareIndex = movieCompareIndex - 1
                    movieCompareIndex = movieCompareIndex + 1
         return movieList
         
-    def secondActorFilter(self,movieList,movieCompareList):    #filters the search results when a second actor is provided via the refine by intersection button
+    #filters the search results when a second actor is provided via the refine by intersection button
+    def secondActorFilter(self,movieList,movieCompareList):    
         matchList = []
         
         for movie in movieList[:]:
@@ -153,7 +170,8 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
                 movieCompareIndex = movieCompareIndex + 1
         return matchList
         
-    def getActorThumb(self):     #not used but the idea was to display actor thumbnail in search results (it worked, just didn't like the UI)
+    #not used but the idea was to display actor thumbnail in search results (it worked, just didn't like the UI)
+    def getActorThumb(self):     
         actorThumb = self.vdb.GetActor()
         actorThumb = "".join(str(actorThumb))
         actorThumb = actorThumb.replace("[(u'<thumb>","")
@@ -164,41 +182,58 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
     def createListItem(self, movieid, path, date, media, role):
         if media != "Refine":
             moviedetails = self.getMovieDetails(movieid, media)
+            
             li = xbmcgui.ListItem(moviedetails.get('title')) 
             li.setProperty(PROPERTY_MOVIEID, str(movieid))
             li.setProperty(YEAR, date)
-            li.setProperty(POSTER, str(moviedetails.get('thumbnail')))
+            
             li.setProperty(ROLE, role)
+            
+            videoInfoTag = li.getVideoInfoTag()
+            #above method replaces deprecated setInfo function
+           
+            
             if media == "Movie":
                # set the path to the file, kodi will use it to fetch additional info from the db
-               
                li.setProperty(MEDIA, media)
                li.setPath(moviedetails.get('file'))
-               li.setInfo('video', { 'mediatype': 'movie' }) 
+               artdetails = moviedetails['art']
+               li.setProperty(POSTER, str(artdetails.get('poster')))
+               videoInfoTag.setMediaType('movie')
+            
             elif media == "TVShow":
                li.setProperty(MEDIA, media)
+               
+               #li.setPath(moviedetails.get('file')) 
                #can't seem to set path to a TVShow  so setting path to the seasons folder instead
                tvpath = path = 'videodb://tvshows/titles/' + str(movieid) + '/'
                li.setProperty(PATH, tvpath)
+               artdetails = moviedetails['art']
+               li.setProperty(POSTER, str(artdetails.get('poster')))
+               videoInfoTag.setMediaType('tvshow')
+               #above method replaces deprecated setInfo function
+               #li.setInfo('video', { 'mediatype': 'tvshow' }) 
                
-               #li.setPath(moviedetails.get('file'))
-               li.setInfo('video', { 'mediatype': 'tvshow' }) 
             elif media == "Episode":
                li.setProperty(MEDIA, str(moviedetails.get('season')) + 'x' + str(moviedetails.get('episode')))
                li.setProperty(SHOWTITLE, moviedetails.get('showtitle'))
                li.setPath(moviedetails.get('file'))
-               li.setInfo('video', { 'mediatype': 'episode' }) 
+               
+               videoInfoTag.setMediaType('episode')
+               li.setProperty(POSTER, str(moviedetails.get('thumbnail')))
+               #above method replaces deprecated setInfo function
+               #li.setInfo('video', { 'mediatype': 'episode' }) 
             
             plot = moviedetails.get('plot')
             #plot = plot.encode(encoding="ascii",errors="replace")
+            
             li.setProperty(PLOTSUM, plot)
             
             directorList = moviedetails.get('director')
             if directorList != None:
                 director = '/'.join(directorList)
                 li.setProperty(DIRECTOR, director)
-            
-            #li.setProperty(ACTORTHUMB, actorThumb)
+                
             # add a video info tag, so kodi knows it's a video item
             #li.setInfo('video', {})
         else:
@@ -211,21 +246,23 @@ class CDialogMagicSearch(xbmcgui.WindowXMLDialog):
     #getting the rest of what we need from JSON
     def getMovieDetails(self, movieid, media):
         if media == "Movie":
-            paramsRaw = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"movieid": %d, "properties": ["title", "studio", "mpaa", "plot", "genre", "year", "runtime", "rating", "tagline", "director", "writer", "fanart", "thumbnail", "file"]}, "id": 1}' % ( movieid, ) ) 
-            paramsRaw = paramsRaw.decode(encoding="utf-8",errors="ignore")
+            paramsRaw = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"movieid": %d, "properties": ["title", "studio", "mpaa", "plot", "genre", "year", "runtime", "rating", "tagline", "director", "writer", "fanart", "thumbnail", "file", "art"]}, "id": 1}' % ( movieid, ) ) 
+            #paramsRaw = paramsRaw.decode(encoding="utf-8",errors="ignore")
             params = json.loads(paramsRaw)
             result = params['result']
+            
             moviedetails = result['moviedetails']
+            
         elif media == "Episode":   
             debug('movieid',movieid)
             paramsRaw = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"episodeid": %d, "properties": ["title", "showtitle", "season", "episode",  "plot", "firstaired", "runtime", "rating", "director", "writer", "fanart", "thumbnail", "file"]}, "id": 1}' % ( movieid, ) )
-            paramsRaw = paramsRaw.decode(encoding="utf-8",errors="ignore")
+            #paramsRaw = paramsRaw.decode(encoding="utf-8",errors="ignore")
             params = json.loads(paramsRaw)
             result = params['result']
             moviedetails = result['episodedetails']
         elif media == "TVShow":   
-            paramsRaw = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"tvshowid": %d, "properties": ["title", "plot", "premiered", "rating", "fanart", "thumbnail", "file"]}, "id": 1}' % ( movieid, ) )
-            paramsRaw = paramsRaw.decode(encoding="utf-8",errors="ignore")
+            paramsRaw = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"tvshowid": %d, "properties": ["title", "plot", "premiered", "rating", "fanart", "thumbnail", "file", "art"]}, "id": 1}' % ( movieid, ) )
+            #paramsRaw = paramsRaw.decode(encoding="utf-8",errors="ignore")
             params = json.loads(paramsRaw)
             result = params['result']
             moviedetails = result['tvshowdetails']

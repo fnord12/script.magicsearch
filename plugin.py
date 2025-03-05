@@ -1,27 +1,20 @@
 import sys
-from urlparse import parse_qsl
+#from urlparse import parse_qsl
+from urllib.parse import parse_qsl
 import xbmcgui
 import xbmcplugin
 from pluginDatabase import CVideoDatabase
 
 def debug(msg, *args):
-    try:
-        txt=u''
-        msg=unicode(msg)
+    try: 
+        xbmc.log("MAGICSEARCH: " + (str(msg)))
+     
         for arg in args:
-            if type(arg) == int:
-                arg = unicode(arg)
-            if type(arg) == list:
-                arg = unicode(arg)
-            txt = txt + u"/" + arg
-        if txt == u'':
-            xbmc.log(u"ACT: {0}".format(msg).encode('ascii','xmlcharrefreplace'), xbmc.LOGDEBUG)
-        else:
-            xbmc.log(u"ACT: {0}#{1}#".format(msg, txt).encode('ascii','xmlcharrefreplace'), xbmc.LOGDEBUG)
+            print(str(arg))
     except:
-        print "Error in Debugoutput"
-        print msg
-        print args
+        print ("MAGICSEARCH plugin.py: Error in Debugoutput")
+        print (msg)
+        print (args)
 
 _handle = int(sys.argv[1])
 
@@ -51,25 +44,39 @@ def list_videos(category, ID, Media, SortBy):
         else:
             listitem = xbmcgui.ListItem(label=actor[0])
         
-        #mapping the fields we need for magicsearch/edit to the fields that Kodi allows for plugins:
+        #mapping the fields we need for magicsearch/edit to the limited fields that Kodi allows for plugins:
         #genre = role
         #country = cast_order
         #tvshowtitle = Media type (movie, episode, tvshow)
         #ID = Media DBID
         
-        listitem.setInfo('video', {'genre': actor[0]})
-        listitem.setInfo('video', {'country': str(actor[3])})  
-        listitem.setInfo('video', {'path': 'xbmc.executebuiltin("Notification(\"Actor Plugin\", \"%s\")" % assetMsg)'})
-        listitem.setInfo('video', {'tvshowtitle': Media})
-        listitem.setInfo('video', {'top250': ID})
+        assetMsg = "This is just an actor.   Nothing to play!"
+        
+        
+        videoInfoTag = listitem.getVideoInfoTag()
+        videoInfoTag.setGenres([actor[0]])
+        videoInfoTag.setCountries([str(actor[3])])  
+        videoInfoTag.setTvShowTitle(Media)
+        videoInfoTag.setTop250(int(ID))
+        videoInfoTag.setPath('xbmc.executebuiltin("Notification(\"Actor Plugin\", \"%s\")" % assetMsg)')
+        
+        
+        #below is the deprecated way to do the above
+        #listitem.setInfo('video', {'genre': actor[0]})
+        #listitem.setInfo('video', {'country': str(actor[3])})  
+        #listitem.setInfo('video', {'path': 'xbmc.executebuiltin("Notification(\"Actor Plugin\", \"%s\")" % assetMsg)'})
+        #listitem.setInfo('video', {'tvshowtitle': Media})
+        #listitem.setInfo('video', {'top250': ID})
+        
+        
         
         thumb = getActorThumb(actor[1])
         listitem.setArt({'thumb': thumb})
         url = ''
         is_folder = False
         
-        #setting context menu items doesn't work?
-        listitem.addContextMenuItems([('Test', "Notification('Testing 125','Hello world')"),('Another Test', "Notification('Testing 126','Goodbye world')")])
+        #setting context menu items - can't remove defaults
+        listitem.addContextMenuItems([('Edit', "Skin.ToggleSetting(MagicToggle)"),('Notice', "Notification('Magic Search & Editor','Please note the context items below are here by default and can't be removed!')")])
         xbmcplugin.addDirectoryItem(_handle, url, listitem, is_folder)
     
     
@@ -94,13 +101,21 @@ def router(paramstring):
     # Check the parameters passed to the plugin
     if params:
         if params['action'] == 'listing':
-            # Display the list of videos in a provided category.
-            debug('Media',params['action'])
-            list_videos(params['category'],params['ID'],params['Media'],params['SortBy'])
+            
+            try:
+            
+                # Display the list of videos in a provided category.
+                # debug('Media',params['action'])
+                list_videos(params['category'],params['ID'],params['Media'],params['SortBy'])
+        
+            except:
+            
+                 debug('Exception in setting cast list.   Possibly loading sooner than Random video load, or when clicking on actor image')                
+        
         elif params['action'] == 'play':
             # Play a video from a provided URL.
-            debug('Here We are',params['action'])
-            assetMsg = "Ok I'll Do It."
+            debug('This never runs either')
+            assetMsg = "This is just an actor.   Nothing to play!"
             xbmc.executebuiltin("Notification(\"Actor Plugin\", \"%s\")" % assetMsg)
             raise ValueError('Invalid paramstring: {0}!'.format(paramstring))
     else:

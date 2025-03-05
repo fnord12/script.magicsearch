@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.magicsearch" name="Magic Search and Editor" version="1.0.0" provider-name="fnord12">
 	<requires>
-		<import addon="xbmc.python" version="2.25.0"/>
+		<import addon="xbmc.python" version="3.0.0"/>
 	</requires>
 	<extension point="xbmc.python.script" library="default.py">
 		<provides>executable</provides>
@@ -31,7 +31,7 @@ As metadata editor:
 -Edit year, genre, studio, plot (in a tiny box, sorry), etc.
 -See included sample DialogVideoInfo.xml to see how to call it.
 </description>
-<disclaimer lang="en_GB">Warnings:#1 Uses direct SQL calls and may require special configuration for non-standard Kodi database.  #2 Causes Kodi to crash on rare occasions.  See readme file.</disclaimer>
+<disclaimer lang="en_GB">Warnings:#1 Uses direct SQL calls and may require special configuration for non-standard Kodi database.  #2 Updating many files at once (i.e. large Seasons or TVShows) will be slow.  #3 Causes Kodi to crash on rare occasions.  See readme file.</disclaimer>
 
 
 		<language></language>
